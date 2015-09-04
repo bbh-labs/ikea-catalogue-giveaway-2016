@@ -2,13 +2,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/bbhmakerlab/debug"
 	"github.com/bbhmakerlab/ikea-catalogue-giveaway-2016/store"
-	"github.com/bradfitz/http2"
+	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 	"github.com/lib/pq"
 )
 
@@ -23,26 +25,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "public/main.html")
 }
 
-func success(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "text/html")
-	http.ServeFile(w, r, "public/success.html")
-}
-
-func duplicate(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "text/html")
-	http.ServeFile(w, r, "public/duplicate.html")
-}
-
-func failed(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "text/html")
-	http.ServeFile(w, r, "public/failed.html")
-}
-
-func outofstock(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Content-Type", "text/html")
-	http.ServeFile(w, r, "public/outofstock.html")
-}
-
 func submit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -53,7 +35,7 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 	if len(name) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Name shouldn't be empty"))
+		w.Write([]byte("Name is empty"))
 		return
 	}
 
@@ -61,7 +43,7 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	address1 := r.FormValue("address1")
 	if len(address1) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Address 1 shouldn't be empty"))
+		w.Write([]byte("Address 1 is empty"))
 		return
 	}
 
@@ -80,7 +62,7 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	city := r.FormValue("city")
 	if len(city) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("City shouldn't be empty"))
+		w.Write([]byte("City is empty"))
 		return
 	}
 
@@ -88,7 +70,7 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	state := r.FormValue("state")
 	if len(state) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("State shouldn't be empty"))
+		w.Write([]byte("State is empty"))
 		return
 	}
 
@@ -104,16 +86,17 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	if len(email) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Address 1 shouldn't be empty"))
+		w.Write([]byte("Email is empty"))
 		return
 	}
 
 	// Check number of entries already submitted
 	if n, err := store.CountEntries(); err != nil {
-		http.Redirect(w, r, "/failed", 302)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else if n >= MaxEntries {
-		http.Redirect(w, r, "/outofstock", 302)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("out of stock"))
 		return
 	}
 
@@ -121,37 +104,31 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	if err := store.InsertEntry(name, address1, address2, city, state, country, postalCode, email); err != nil {
 		e, ok := err.(*pq.Error)
 		if ok && e.Code == "23505" { // unique violation
-			http.Redirect(w, r, "/duplicate", 302)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("duplicate"))
 			return
 		} else {
 			debug.Warn(err)
-			http.Redirect(w, r, "/failed", 302)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	}
 
-	http.Redirect(w, r, "/success", 302)
+	w.WriteHeader(http.StatusOK)
+}
+
+// Check number of entries already submitted
+func count(w http.ResponseWriter, r *http.Request) {
+	if n, err := store.CountEntries(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		w.Write([]byte(fmt.Sprintf("%d", n)))
+	}
 }
 
 func itoa(i int) string {
 	return strconv.Itoa(i)
 }
-
-func startServer() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	srv := http.Server{Addr: ":443"}
-	http2.ConfigureServer(&srv, &http2.Server{})
-	go func() {
-	     debug.Fatal(http.ListenAndServe(":" + port, nil))
-	}()
-
-	debug.Fatal(srv.ListenAndServeTLS("/home/website/ssl/server.crt", "/home/website/ssl/server.key"))
-}
-
 
 func main() {
 	// parse CLI options
@@ -161,11 +138,17 @@ func main() {
 	store.Init()
 
 	// configure server
-	http.HandleFunc("/", home)
-	http.HandleFunc("/submit", submit)
-	http.HandleFunc("/success", success)
-	http.HandleFunc("/duplicate", duplicate)
-	http.HandleFunc("/failed", failed)
-	http.HandleFunc("/outofstock", outofstock)
-	startServer()
+	router := mux.NewRouter()
+	router.HandleFunc("/", home)
+	router.HandleFunc("/submit", submit)
+	router.HandleFunc("/count", count)
+
+	// start server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	n := negroni.Classic()
+	n.UseHandler(router)
+	n.Run(":" + port)
 }

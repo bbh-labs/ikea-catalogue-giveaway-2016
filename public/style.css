@@ -1,8 +1,5 @@
-body { background: #333 }
 img { display: block; margin: 0 auto; padding: 16px 0 !important; }
 form { background: white; }
-a, .error label, .error label.error { color: #003399; }
-[data-abide] .error small.error, [data-abide] .error span.error, [data-abide] span.error, [data-abide] small.error { background: #003399; }
 .button { border: 1px solid white; background: #003399; }
 .button:hover { background: #003399; }
 .message { padding: 16px 0; }

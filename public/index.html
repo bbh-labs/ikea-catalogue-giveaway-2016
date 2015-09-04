@@ -38,6 +38,7 @@
 				<label>Address 1 <small>required</small>
 					<input id="address1" type="text" name="address1" maxlength="64" required />
 				</label>
+				<small class="error">Address 1 is required</small>
 			</div>
 		</div>
 		<div class="row">
@@ -63,6 +64,7 @@
 				<label>City <small>required</small>
 					<input id="city" type="text" name="city" maxlength="64" required />
 				</label>
+				<small class="error">City is required</small>
 			</div>
 		</div>
 		<div class="row">
@@ -85,6 +87,7 @@
 						<option value="Terengganu">Terengganu</option>
 					</select>
 				</label>
+				<small class="error">State is required</small>
 			</div>
 		</div>
 		<div class="row">
@@ -99,6 +102,7 @@
 				<label>Email <small>required</small>
 					<input id="email" type="email" name="email" maxlength="254" required pattern="email"/>
 				</label>
+				<small class="error">Email is required</small>
 			</div>
 		</div>
 		<div class="row">
@@ -108,6 +112,7 @@
 						<label for="agree">I Agree to the Terms & Conditions</label>
 					</input>
 				</label>
+				<small class="error">You must agree to the Terms & Conditions</small>
 			</div>
 		</div>
 		<div class="row">
@@ -116,6 +121,11 @@
 			</div>
 		</div>
 	</form>
+
+	<div id="outofstock2" class="large-6 large-offset-3 columns" style="display: none">
+		<h3>Sorry!</h3>
+		<h5>All the IKEA catalogues have been snapped up. Head down to the IKEA store from the XXth of September to get a copy of the 2016 IKEA catalogue for yourself.</h5>
+	</div>
 
 	<div id="tnc" class="reveal-modal" data-reveal aria-labelledby="tnc-button" aria-hidden="true" role="dialog">
 		<h5>Terms & conditions</h5>
@@ -131,8 +141,73 @@
 		<p>For more details, please refer to our “Personal Data Privacy Policy” as published on our website <a href="www.IKEA.com.my/pdpa">www.IKEA.com.my/pdpa</a></p>
 		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 	</div>
+	<div id="success" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
+		<h3 class="message">Thank You!</h3>
+		<h5 class="message">You've got yourself a copy of the 2016 IKEA catalogue, filled with delicious ideas to help you cook up a storm in the kitchen. Please give us 1-2 weeks  to deliver the catalogue to your home.</h5>
+		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+	</div>
+	<div id="outofstock" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
+		<h3 class="message">Sorry!</h3>
+		<h5 class="message">All the IKEA catalogues have been snapped up. Head down to the IKEA store from the XXth of September to get a copy of the 2016 IKEA catalogue for yourself.</h5>
+		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+	</div>
+	<div id="duplicate" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
+		<h3 class="message">Sorry!</h3>
+		<h5 class="message">You've already submitted your details before.</h5>
+	</div>
+	<div id="failed" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
+		<h3 class="message">Error!</h3>
+		<h5 class="message">Sorry! the server failed to process the data for some reason.</h5>
+		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+	</div>
 	<script>
 		$(document).foundation();
+		$(document).ready(function() {
+			$.ajax({
+				url: "/count",
+				method: "GET",
+			}).done(function(resp) {
+				var n = parseInt(resp);
+				if (n > 8000) {
+					$("#form").css({display: "none"});
+					$("#outofstock2").css({display: "block"});
+				}
+			}).fail(function(resp) {
+				console.log(resp.responseText);
+			});
+
+			$("#form").submit(function(evt) {
+				evt.preventDefault();
+
+				var form = evt.target;
+				if (form.elements["name"].value.length == 0 ||
+				    form.elements["address1"].value.length == 0 ||
+				    form.elements["city"].value.length == 0 ||
+				    form.elements["state"].value.length == 0 ||
+				    form.elements["country"].value.length == 0 ||
+				    form.elements["email"].value.length == 0 ||
+				    form.elements["postal_code"].value.length == 0 ||
+				    form.elements["agree"].checked == false) {
+				    return false;
+				}
+
+				$.ajax({
+					url: evt.target.action,
+					method: "POST",
+					data: $(evt.target).serialize(),
+				}).done(function(resp) {
+					$("#success").foundation("reveal", "open");
+				}).fail(function(resp) {
+					if (resp.responseText.indexOf("out of stock") >= 0) {
+						$("#outofstock").foundation("reveal", "open");
+					} else if (resp.responseText.indexOf("duplicate") >= 0) {
+						$("#duplicate").foundation("reveal", "open");
+					} else if (resp.status >= 500) {
+						$("#failed").foundation("reveal", "open");
+					}
+				});
+			});
+		});
 	</script>
 </body>
 </html>
