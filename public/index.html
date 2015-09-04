@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- jQuery -->
+	<script src="vendor/foundation/js/vendor/jquery.js"></script>
+
+	<!-- Fast Click -->
+	<script src="vendor/foundation/js/vendor/fastclick.js"></script>
+
+	<!-- Foundation -->
+	<link rel="stylesheet" href="vendor/foundation/css/foundation.min.css" />
+	<script src="vendor/foundation/js/foundation.min.js"></script>
+	
+	<!-- Custom -->
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<img class="large-6 large-offset-3 columns" src="images/banner.jpg" />
+	<form class="large-6 large-offset-3 columns" id="form" action="/submit" method="POST" data-abide style="padding-top: 16px;">
+		<div class="row" style="padding-bottom: 16px;">
+			<div class="large-12 columns">
+				<strong>Want to learn how to cook up recipes for a delicious kitchen?</strong><br/>
+				<p>Get inspired with a copy of the new 2016 IKEA catalogue fresh off the stove, and delivered warm to your door step.<br/></p>
+				<p>Sign up to receive an IKEA catalogue of your own by filling in your details below. Registration is only available to Malaysian residents.</p>
+				<a href="#" data-reveal-id="tnc" style="display: inline">Terms and Conditions apply.</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-6 columns">
+				<label>Name <small>required</small>
+					<input id="name" type="text" name="name" maxlength="32" required pattern="[a-zA-Z\s]+" />
+				</label>
+				<small class="error">Name is required</small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-6 columns">
+				<label>Address 1 <small>required</small>
+					<input id="address1" type="text" name="address1" maxlength="64" required />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-6 columns">
+				<label>Address 2
+					<input id="address2" type="text" name="address2" maxlength="64" />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-4 columns">
+				<label>Postal Code <small>required (5 digits only)</small></label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-3 columns">
+				<input id="postal_code" type="text" name="postal_code" minlength="5" maxlength="5" required pattern="[0-9][0-9][0-9][0-9][0-9]"/>
+				<small class="error">Postal code must be 5 digits</small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-3 columns">
+				<label>City <small>required</small>
+					<input id="city" type="text" name="city" maxlength="64" required />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-4 columns">
+				<label>State
+					<select id="state" name="state" required>
+						<option value="">Choose your country state</option>
+						<option value="Johor">Johor</option>
+						<option value="Kedah">Kedah</option>
+						<option value="Kelantan">Kelantan</option>
+						<option value="Malacca">Malacca</option>
+						<option value="Negeri Sembilan">Negeri Sembilan</option>
+						<option value="Pahang">Pahang</option>
+						<option value="Perak">Perak</option>
+						<option value="Perlis">Perlis</option>
+						<option value="Penang">Penang</option>
+						<option value="Sabah">Sabah</option>
+						<option value="Sarawak">Sarawak</option>
+						<option value="Selangor">Selangor</option>
+						<option value="Terengganu">Terengganu</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-3 columns">
+				<label>Country
+					<input id="country" type="text" name="country" value="Malaysia" readonly />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-4 columns">
+				<label>Email <small>required</small>
+					<input id="email" type="email" name="email" maxlength="254" required />
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<label>
+					<input id="agree" type="checkbox" name="agree" required>
+						<label for="agree">I Agree to the Terms & Conditions</label>
+					</input>
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<button type="submit" style="background: #003399;">Submit</button>
+			</div>
+		</div>
+	</form>
+
+	<div id="tnc" class="reveal-modal" data-reveal aria-labelledby="tnc-button" aria-hidden="true" role="dialog">
+		<h5>Terms & conditions</h5>
+
+		<p>PLEASE CAREFULLY READ THE PROVISIONS BELOW BEFORE PROVIDING YOUR PERSONAL DATA TO PARTICIPATE IN THE GIVEAWAY.</p><br/>
+
+		<p>BY PROVIDING YOUR PERSONAL DATA PURSUANT TO THE STATUTORY REQUIREMENTS OF THE PERSONAL DATA PROTECTION ACT 2010, YOU ACKNOWLEDGE THAT YOU HAVE READ AND FULLY UNDERSTAND THE CONTENTS OF THE PROVISIONS AND YOU HEREBY GIVE YOUR CONSENT AS SET OUT BELOW.</p><br/>
+
+		<p>By submitting your personal data (which includes names, mailing addresses, email addresses and/or any other data attribute establishing the personal identity) you consent to Ikano Pte Ltd collecting, using, disclosing and/or processing your personal data for the purpose of “2016 IKEA Catalogue Giveaway”.</p><br/>
+
+		<p>During your course of dealing with us, we will process your personal data for the above mentioned purpose, including, to communicate with you, provide products and/or services to you, respond to your enquiries or complaints, provide you with information and/or updates on products, services and/or promotions offered by Ikano Pte Ltd, identify you (including publishing your name and photograph) when you participate in the giveaway organised by us and other purposes required to operate and maintain our business as set out in our Personal Data Privacy Policy (collectively referred to as “Purposes”).</p><br/>
+
+		<p>For more details, please refer to our “Personal Data Privacy Policy” as published on our website <a href="www.IKEA.com.my/pdpa">www.IKEA.com.my/pdpa</a></p>
+	</div>
+	<script>
+		$(document).foundation();
+	</script>
+</body>
+</html>
