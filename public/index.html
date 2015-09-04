@@ -32,6 +32,12 @@
 				</label>
 				<small class="error">Name is required</small>
 			</div>
+			<div class="large-6 columns">
+				<label>Email <small>required</small>
+					<input id="email" type="email" name="email" maxlength="254" required pattern="email"/>
+				</label>
+				<small class="error">Email is required</small>
+			</div>
 		</div>
 		<div class="row">
 			<div class="large-6 columns">
@@ -40,8 +46,6 @@
 				</label>
 				<small class="error">Address 1 is required</small>
 			</div>
-		</div>
-		<div class="row">
 			<div class="large-6 columns">
 				<label>Address 2
 					<input id="address2" type="text" name="address2" maxlength="64" />
@@ -49,26 +53,26 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="large-4 columns">
-				<label>Postal Code <small>required (5 digits only)</small></label>
-			</div>
-		</div>
-		<div class="row">
 			<div class="large-3 columns">
-				<input id="postal_code" type="text" name="postal_code" maxlength="5" required pattern="[0-9][0-9][0-9][0-9][0-9]"/>
-				<small class="error">Postal code must be 5 digits</small>
+				<div class="row">
+					<div class="large-12 columns">
+						<label>Postal Code <small>required</small></label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12 columns">
+						<input id="postal_code" type="text" name="postal_code" placeholder="5 digits only" maxlength="5" required pattern="[0-9][0-9][0-9][0-9][0-9]"/>
+						<small class="error">Postal code must be 5 digits</small>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="row">
 			<div class="large-3 columns">
 				<label>City <small>required</small>
 					<input id="city" type="text" name="city" maxlength="64" required />
 				</label>
 				<small class="error">City is required</small>
 			</div>
-		</div>
-		<div class="row">
-			<div class="large-4 columns">
+			<div class="large-3 columns">
 				<label>State
 					<select id="state" name="state" required>
 						<option value="">Choose your country state</option>
@@ -89,20 +93,10 @@
 				</label>
 				<small class="error">State is required</small>
 			</div>
-		</div>
-		<div class="row">
 			<div class="large-3 columns">
 				<label>Country
 					<input id="country" type="text" name="country" value="Malaysia" readonly />
 				</label>
-			</div>
-		</div>
-		<div class="row">
-			<div class="large-4 columns">
-				<label>Email <small>required</small>
-					<input id="email" type="email" name="email" maxlength="254" required pattern="email"/>
-				</label>
-				<small class="error">Email is required</small>
 			</div>
 		</div>
 		<div class="row">
@@ -117,7 +111,7 @@
 		</div>
 		<div class="row">
 			<div class="large-12 columns">
-				<button type="submit" style="background: #003399;">Submit</button>
+				<button type="submit" style="display: block; margin: 0 auto; background: #003399;">Submit</button>
 			</div>
 		</div>
 	</form>
