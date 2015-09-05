@@ -119,12 +119,16 @@
 	</form>
 
 	<div id="outofstock2" class="medium-6 medium-offset-3 columns" style="display: none">
-		<h3>Sorry!</h3>
-		<h5>All the IKEA catalogues have been snapped up. Head down to the IKEA store from the XXth of September to get a copy of the 2016 IKEA catalogue for yourself.</h5>
+		<h3>Sorry</h3>
+		<h5>But all the IKEA Catalogues have been snapped up. Head down to the IKEA store to get yourself a copy of the 2016 IKEA Catalogue.</h5>
 	</div>
 
 	<div id="tnc" class="reveal-modal" data-reveal aria-labelledby="tnc-button" aria-hidden="true" role="dialog">
 		<h5>Terms & conditions</h5>
+
+		<p>1. This giveaway is only valid for residents of Malaysia.</p>
+		<p>2. The 2016 IKEA Catalogue giveaway is subject to availability.</p>
+		<p>3. Delivery is subject to Pos Malaysia. IKEA Malaysia is unable to guarantee the receipt of the catalogue.</p>
 
 		<p>PLEASE CAREFULLY READ THE PROVISIONS BELOW BEFORE PROVIDING YOUR PERSONAL DATA TO PARTICIPATE IN THE GIVEAWAY.</p><br/>
 
@@ -143,17 +147,17 @@
 		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 	</div>
 	<div id="outofstock" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-		<h3 class="message">Sorry!</h3>
-		<h5 class="message">All the IKEA catalogues have been snapped up. Head down to the IKEA store from the XXth of September to get a copy of the 2016 IKEA catalogue for yourself.</h5>
+		<h3 class="message">Sorry</h3>
+		<h5 class="message">All the IKEA catalogues have been snapped up. Head down to the IKEA store to get yourself a copy of the 2016 IKEA Catalogue.</h5>
 		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 	</div>
 	<div id="duplicate" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-		<h3 class="message">Sorry!</h3>
+		<h3 class="message">Sorry</h3>
 		<h5 class="message">You've already submitted your details before.</h5>
 	</div>
 	<div id="failed" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-		<h3 class="message">Error!</h3>
-		<h5 class="message">Sorry! the server failed to process the data for some reason.</h5>
+		<h3 class="message">Error</h3>
+		<h5 class="message">Sorry the server failed to process the data for some reason.</h5>
 		<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 	</div>
 	<script>
@@ -164,7 +168,7 @@
 				method: "GET",
 			}).done(function(resp) {
 				var n = parseInt(resp);
-				if (n > 8000) {
+				if (n >= 8000) {
 					$("#form").css({display: "none"});
 					$("#outofstock2").css({display: "block"});
 				}
