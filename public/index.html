@@ -180,15 +180,15 @@
 				evt.preventDefault();
 
 				var form = evt.target;
-				if (form.elements["name"].value.length == 0 ||
-				    form.elements["address1"].value.length == 0 ||
-				    form.elements["city"].value.length == 0 ||
-				    form.elements["state"].value.length == 0 ||
-				    form.elements["country"].value.length == 0 ||
-				    form.elements["email"].value.length == 0 ||
-				    form.elements["postal_code"].value.length == 0 ||
+				if ($(form.elements["name"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["address1"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["city"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["state"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["country"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["email"]).attr("aria-invalid") == "true" ||
+				    $(form.elements["postal_code"]).attr("aria-invalid") == "true" ||
 				    form.elements["agree"].checked == false) {
-				    return false;
+					return false;
 				}
 
 				$.ajax({
