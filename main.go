@@ -31,6 +31,8 @@ func submit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "http://www.malaysia-ikea.com")
+
 	// Name
 	name := r.FormValue("name")
 	if len(name) == 0 {
@@ -119,6 +121,13 @@ func submit(w http.ResponseWriter, r *http.Request) {
 
 // Check number of entries already submitted
 func count(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "http://www.malaysia-ikea.com")
+
 	if n, err := store.CountEntries(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	} else {
